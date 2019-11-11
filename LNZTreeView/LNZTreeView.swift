@@ -152,7 +152,7 @@ public class LNZTreeView: UIView {
         return nodesForSection[section]?.filter( { parent?.identifier == $0.parent?.identifier }).count ?? 0
     }
     
-    private func toggleExpanded(_ toggle: Bool, node: TreeNodeProtocol, inSection section: Int) -> Bool {
+    private func toggleExpanded(_ toggle: Bool, node: TreeNodeProtocol, inSection section: Int, select: Bool = true) -> Bool {
         guard node.isExpandable,
             let nodes = nodesForSection[section],
             let indexPath = indexPathForNode(node, inSection: section) else {
@@ -161,7 +161,9 @@ public class LNZTreeView: UIView {
         
         let minimalNode = nodes[indexPath.row]
         guard minimalNode.isExpanded != toggle else { return true }
-        tableView(tableView, didSelectRowAt: indexPath)
+        if(select){
+            tableView(tableView, didSelectRowAt: indexPath)
+        }
         return minimalNode.isExpanded == toggle
     }
     
@@ -172,8 +174,8 @@ public class LNZTreeView: UIView {
      - returns: true if the node was successfully expanded, false otherwise.
      */
     @discardableResult
-    public func expand(node: TreeNodeProtocol, inSection section: Int) -> Bool {
-        return toggleExpanded(true, node: node, inSection: section)
+    public func expand(node: TreeNodeProtocol, inSection section: Int, select: Bool) -> Bool {
+        return toggleExpanded(true, node: node, inSection: section, select: select)
     }
     
     /**
@@ -185,7 +187,7 @@ public class LNZTreeView: UIView {
      */
     @discardableResult
     public func collapse(node: TreeNodeProtocol, inSection section: Int) -> Bool {
-        return toggleExpanded(false, node: node, inSection: section)
+        return toggleExpanded(false, node: node, inSection: section, select: false)
     }
     
     /**
