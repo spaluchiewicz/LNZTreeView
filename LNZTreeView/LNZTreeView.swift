@@ -174,7 +174,7 @@ public class LNZTreeView: UIView {
      - returns: true if the node was successfully expanded, false otherwise.
      */
     @discardableResult
-    public func expand(node: TreeNodeProtocol, inSection section: Int, select: Bool) -> Bool {
+    public func expand(node: TreeNodeProtocol, inSection section: Int, select: Bool = true) -> Bool {
         return toggleExpanded(true, node: node, inSection: section, select: select)
     }
     
