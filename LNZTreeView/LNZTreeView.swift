@@ -208,11 +208,11 @@ public class LNZTreeView: UIView {
     /**
      Retrieve the index path for a given node in a given section.
      */
-    private func indexPathForNode(_ node: TreeNodeProtocol, inSection section: Int) -> IndexPath? {
+    public func indexPathForNode(_ node: TreeNodeProtocol, inSection section: Int) -> IndexPath? {
         return indexPathForNode(withIdentifier: node.identifier, inSection: section)
     }
     
-    private func indexPathForNode(withIdentifier identifier: String, inSection section: Int) -> IndexPath? {
+    public func indexPathForNode(withIdentifier identifier: String, inSection section: Int) -> IndexPath? {
         guard let nodes = nodesForSection[section],
             let nodeIndex = nodes.index(where: { $0.identifier == identifier }) else {
                 return nil
