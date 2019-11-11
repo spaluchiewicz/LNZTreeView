@@ -52,7 +52,7 @@ public class LNZTreeView: UIView {
         tableView.setEditing(editing, animated: animated)
     }
 
-    public lazy var tableView: UITableView! = {
+    lazy var tableView: UITableView! = {
         return UITableView(frame: frame, style: .plain)
     }()
     
@@ -152,7 +152,7 @@ public class LNZTreeView: UIView {
         return nodesForSection[section]?.filter( { parent?.identifier == $0.parent?.identifier }).count ?? 0
     }
     
-    private func toggleExpanded(_ toggle: Bool, node: TreeNodeProtocol, inSection section: Int) -> Bool {
+    private func toggleExpanded(_ toggle: Bool, node: TreeNodeProtocol, inSection section: Int, select: Bool) -> Bool {
         guard node.isExpandable,
             let nodes = nodesForSection[section],
             let indexPath = indexPathForNode(node, inSection: section) else {
@@ -161,7 +161,9 @@ public class LNZTreeView: UIView {
         
         let minimalNode = nodes[indexPath.row]
         guard minimalNode.isExpanded != toggle else { return true }
-        tableView(tableView, didSelectRowAt: indexPath)
+        if(select){
+            tableView(tableView, didSelectRowAt: indexPath)
+        }
         return minimalNode.isExpanded == toggle
     }
     
@@ -173,7 +175,7 @@ public class LNZTreeView: UIView {
      */
     @discardableResult
     public func expand(node: TreeNodeProtocol, inSection section: Int) -> Bool {
-        return toggleExpanded(true, node: node, inSection: section)
+        return toggleExpanded(true, node: node, inSection: section, select: false)
     }
     
     /**
@@ -184,8 +186,8 @@ public class LNZTreeView: UIView {
      - returns: true if the node was successfully collapsed, false otherwise.
      */
     @discardableResult
-    public func collapse(node: TreeNodeProtocol, inSection section: Int) -> Bool {
-        return toggleExpanded(false, node: node, inSection: section)
+    public func collapse(node: TreeNodeProtocol, inSection section: Int, select: Bool) -> Bool {
+        return toggleExpanded(false, node: node, inSection: section, select: select)
     }
     
     /**
@@ -208,11 +210,11 @@ public class LNZTreeView: UIView {
     /**
      Retrieve the index path for a given node in a given section.
      */
-    public func indexPathForNode(_ node: TreeNodeProtocol, inSection section: Int) -> IndexPath? {
+    private func indexPathForNode(_ node: TreeNodeProtocol, inSection section: Int) -> IndexPath? {
         return indexPathForNode(withIdentifier: node.identifier, inSection: section)
     }
     
-    public func indexPathForNode(withIdentifier identifier: String, inSection section: Int) -> IndexPath? {
+    private func indexPathForNode(withIdentifier identifier: String, inSection section: Int) -> IndexPath? {
         guard let nodes = nodesForSection[section],
             let nodeIndex = nodes.index(where: { $0.identifier == identifier }) else {
                 return nil
